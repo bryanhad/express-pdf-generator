@@ -51,7 +51,7 @@
                 <% Object.entries(data).forEach(([key, value]) => { %>
                     <% if (key !== 'attachments' && key !== 'kuasa') { %>
                         <div style="width: 100%; display: flex; padding-bottom: 4px; gap: 12px;">
-                            <p style="width: 125px; margin: 0px; text-transform: capitalize;">
+                            <p style="width: 125px; margin: 0px; text-transform: capitalize; line-height: 1.4;">
                                 <% switch (key) {
                                     case "NIKAtauNomorAktaPendirian": %>
                                     <% if (data.jenis === 'PRIBADI') { %>
@@ -102,7 +102,7 @@
                 <div class="fields-section">
                     <% Object.entries(data.kuasa).forEach(([key, value]) => { %>
                         <div style="width: 100%; display: flex; padding-bottom: 4px; gap: 12px;">
-                            <p style="width: 125px; margin: 0px; text-transform: capitalize;">
+                            <p style="width: 125px; margin: 0px; text-transform: capitalize; line-height: 1.4;">
                                 <% switch (key) {
                                     case "namaKuasaHukum": %>
                                         <%= "Nama"%>
