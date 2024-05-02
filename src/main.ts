@@ -1,7 +1,6 @@
 import express from 'express'
 import cors from 'cors'
 import generatePDF from './lib/generatePDF'
-import ejs from 'ejs'
 
 const app = express()
 
@@ -22,7 +21,11 @@ app.set('view engine', 'ejs')
 app.set('views', __dirname + '/views')
 
 app.get('/', (req, res) => {
-    res.status(200).json({ message: 'Hello from express!' })
+    res.status(200).json({ message: 'Hello from express hehe!' })
+})
+
+app.get('/generate-pdf', (req, res) => {
+    res.status(200).json({ message: 'Hello from /generate-pdf route!' })
 })
 
 app.post('/generate-pdf', async (req, res) => {

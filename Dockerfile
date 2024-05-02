@@ -1,6 +1,10 @@
 # Use Node.js as the base image
 FROM node:18
 
+RUN apt-get update && \
+    apt-get install -y nano && \
+    rm -rf /var/lib/apt/lists/*
+
 # Install Google Chrome Stable and fonts
 # Note: this installs the necessary libs to make the browser work with Puppeteer.
 RUN apt-get update && apt-get install gnupg wget -y && \
