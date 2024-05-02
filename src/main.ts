@@ -27,12 +27,11 @@ app.get('/', (req, res) => {
 
 app.post('/generate-pdf', async (req, res) => {
     const { data } = req.body
-    console.log(data)
 
     res.setHeader('Content-Disposition', 'attachment; filename="file.pdf"')
     res.setHeader('Content-Type', 'application/pdf')
 
-    const pdfFile = await generatePDF()
+    const pdfFile = await generatePDF(data)
 
     res.send(Buffer.from(pdfFile))
 })
