@@ -5,14 +5,14 @@ import ejs from 'ejs'
 
 const app = express()
 
-// Enable CORS for a specific domain
-const corsOptions = {
-    origin: [
-        'https://your-nextjs-app-domain.com',
-        'http://127.0.0.1:3000',
-        'http://localhost:3000',
-    ],
-}
+// // Enable CORS for a specific domain
+// const corsOptions = {
+//     origin: [
+//         'https://your-nextjs-app-domain.com',
+//         'http://127.0.0.1:3000',
+//         'http://localhost:3000',
+//     ],
+// }
 
 app.use(cors())
 app.use(express.json())
@@ -31,8 +31,11 @@ app.post('/generate-pdf', async (req, res) => {
     res.setHeader('Content-Disposition', 'attachment; filename="file.pdf"')
     res.setHeader('Content-Type', 'application/pdf')
 
-    const pdfFile = await generatePDF(data)
+    const pdfFile:Buffer = await generatePDF(data)
 
+    // console.log(pdfFile)
+    // console.log("pdffileType:", typeof pdfFile)
+    // console.log("is instance of Buffer?:", pdfFile instanceof Buffer)
     res.send(Buffer.from(pdfFile))
 })
 

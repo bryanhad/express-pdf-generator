@@ -58,7 +58,7 @@ import path from 'path'
 
 const ejsFilePath = path.join(__dirname, '..', 'views', 'template.ejs')
 
-async function generatePDF(data:any) {
+async function generatePDF(data: any) {
     const {
         totalTagihan,
         id,
@@ -97,9 +97,11 @@ async function generatePDF(data:any) {
             ...rest,
         },
     })
-    console.log(html)
 
-    const browser = await puppeteer.launch()
+    const browser = await puppeteer.launch({
+        executablePath: '/usr/bin/google-chrome',
+        args: ['--no-sandbox'], // Pass the --no-sandbox flag here
+    })
     const page = await browser.newPage()
 
     // Set content of the page to the generated HTML
