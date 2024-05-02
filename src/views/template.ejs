@@ -1,73 +1,186 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PDF Document</title>
-  <style>
-    /* Define CSS styles for formatting */
-    .container {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-    }
-    .field {
-      margin-bottom: 10px;
-    }
-    .field-name {
-      font-weight: bold;
-    }
-    .attachment-table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    .attachment-table th,
-    .attachment-table td {
-      border: 1px solid #dddddd;
-      padding: 8px;
-      text-align: left;
-    }
-    .attachment-table th {
-      background-color: #f2f2f2;
-    }
-    /* Define margin for the second page */
-    @page {
-      margin: 20px;
-    }
-  </style>
-</head>
-<body>
-  <!-- Wrapper div for content -->
-  <div class="container">
-    <!-- Iterate over each field in the data -->
-    <div>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>PDF Document</title>
+        <style>
+            /* Define CSS styles for formatting */
+            .container {
+                font-family: Arial, sans-serif;
+            }
+            .field {
+                margin-bottom: 15px;
+            }
+            .section-name {
+                font-weight: bold;
+                font-size: 20px;
+                margin-bottom: 10px;
 
-    </div>
+            }
+            .fields-section {
+                width: 100%;
+                margin-right: 25px;
+            }
+            .attachment-table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            .attachment-table th,
+            .attachment-table td {
+                border: 1px solid #dddddd;
+                padding: 8px;
+                text-align: left;
+            }
+            .attachment-table th {
+                background-color: #f2f2f2;
+            }
+            /* Define margin for the second page */
+            @page {
+                margin: 100px 25px 45px 25px;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Wrapper div for content -->
+        <div class="container">
+            <div class="field">
+            <div class="section-name">Detail Kreditor:</div>
+            <!-- Iterate over each field in the data -->
+            <div class="fields-section">
+                <% Object.entries(data).forEach(([key, value]) => { %>
+                    <% if (key !== 'attachments' && key !== 'kuasa') { %>
+                        <div style="width: 100%; display: flex; padding-bottom: 4px; gap: 12px;">
+                            <p style="width: 125px; margin: 0px; text-transform: capitalize;">
+                                <% switch (key) {
+                                    case "NIKAtauNomorAktaPendirian": %>
+                                    <% if (data.jenis === 'PRIBADI') { %>
+                                            <%= "NIK" %>
+                                        <% } else { %>
+                                            <%= "Nomor Akta Pendirian" %>
+                                    <% } %>
+                                  <% break;
+                                    case "sifatTagihan": %>
+                                        <%= "Sifat Tagihan"%>
+                              
+                                    <% break; 
+                                    case "totalTagihan": %>
+                                        <%= "Total Tagihan"%>
+                                    <% break; 
+                                    case "nomorTelepon": %>
+                                        <%= "Nomor Telepon"%>
 
+                                  <% break;
+                                    default: %>
+                                    <%= key %>
+                                  <%  break; } %>
+                            </p>
+                            <p style="width: 7px; margin: 0px; text-align: center;">:</p>
+                            <p style="flex: 1 1 0%; margin: 0px; line-height: 1.4; ">
+                                <% if (value.length < 1) { %>    
+                                    -
+                                <% } else {%>
+                                    <%= value %>
+                                <% } %>
+                            </p>
+                        </div>
+                    <% } %>
+                 <% }); %>
+                </div>
+            </div>
+            <div class="field">
+                <% if (data.kuasa.namaKuasaHukum === '') { %>
+                    <div style="display: flex; margin-bottom: 10px; gap: 10px; align-items: end;">
+                        <p style="font-size: 20px; font-weight: bold; margin: 0;">Detail Kuasa:</p>
+                        <p style="margin: 0;">Tidak Menggunakan Kuasa</p>
+                    </div>
+                    
+                <%} else {%>
+                <div class="section-name">Detail Kuasa:</div>
+                <div class="fields-section">
+                    <% Object.entries(data.kuasa).forEach(([key, value]) => { %>
+                        <div style="width: 100%; display: flex; padding-bottom: 4px; gap: 12px;">
+                            <p style="width: 125px; margin: 0px; text-transform: capitalize;">
+                                <% switch (key) {
+                                    case "namaKuasaHukum": %>
+                                        <%= "Nama"%>
+                                    <% break; 
+                                    case "emailKuasaHukum": %>
+                                        <%= "Email"%>
+                                    <% break; 
+                                    case "nomorTeleponKuasaHukum": %>
+                                        <%= "Nomor Telepon"%>
+                                    <% break; 
+                                    case "alamatKuasaHukum": %>
+                                        <%= "Alamat"%>
+                                  <%  break; } %>
+                            </p>
+                            <p style="width: 7px; margin: 0px; text-align: center;">:</p>
+                            <p style="flex: 1 1 0%; margin: 0px; line-height: 1.4; ">
+                                <% if (value.length < 1) { %>    
+                                    -
+                                <% } else {%>
+                                    <%= value %>
+                                <% } %>
+                            </p>
+                        </div>
+                 <% }); %>
+                </div>
+                <%}%>
+                
+            </div>
 
-    <div class="field">
-          <div class="field-name">Attachment:</div>
-          <table class="attachment-table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Nama</th>
-                <th>Ready</th>
-                <th>Deskripsi</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- Iterate over each attachment and display as a table row -->
-              <% data.attachments.forEach(attachment => { %>
-                <tr>
-                  <td><%= attachment.id %></td>
-                  <td><%= attachment.nama %></td>
-                  <td><%= attachment.ready %></td>
-                  <td><%= attachment.deskripsi %></td>
-                </tr>
-              <% }) %>
-            </tbody>
-          </table>
-    </div>
-  </div>
-</body>
+            <div class="field">
+                <div class="section-name">Lampiran:</div>
+                <table class="attachment-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 5%">No</th>
+                            <th style="width: 20%">Nama</th>
+                            <th style="width: 5%">Ready</th>
+                            <th style="width: 70%">Deskripsi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (data.attachments.length < 1) { %>
+                        <tr>
+                            <td colspan="4" style="text-align: center">
+                                (TIDAK ADA LAMPIRAN)
+                            </td>
+                        </tr>
+                        <% } else { %>
+                        <!-- Iterate over each attachment and display as a table row -->
+                        <% data.attachments.forEach((attachment, idx) => { %>
+                        <tr>
+                            <td style="text-align: center; font-size: 13px">
+                                <%= idx + 1 %>
+                            </td>
+                            <td style="font-size: 13px; line-height: 1.4;">
+                                <%= attachment.nama %>
+                            </td>
+                            <td style="text-align: center">
+                                <% if (attachment.ready === true) { %> &#10003;
+                                <% } %>
+                            </td>
+                            <td style="font-size: 13px; line-height: 1.4;">
+                                <% if (attachment.deskripsi.length < 1) { %>
+                                <div
+                                    style="
+                                        padding-left: 5px;
+                                        padding-right: 5px;
+                                    "
+                                >
+                                    -
+                                </div>
+                                <% } else { %> <%= attachment.deskripsi %>
+                            </td>
+
+                            <% } %>
+                        </tr>
+                        <% }) %> <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
 </html>
