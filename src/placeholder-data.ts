@@ -1,0 +1,53 @@
+export const placeholderCreditorData = {
+    id: '1',
+    nama: 'Bambang Jarwo',
+    jenis: 'PRIBADI',
+    NIKAtauNomorAktaPendirian: '12345678',
+    alamat: 'Jl. Menteng Raya No. 1',
+    nomorTelepon: null,
+    korespondensi: 'Jl. Gajah Mada No. 10',
+    totalTagihan: '300000000',
+    sifatTagihan: 'PREFEREN',
+    namaKuasaHukum: null,
+    emailKuasaHukum: null,
+    nomorTeleponKuasaHukum: '081234567891',
+    alamatKuasaHukum: 'Jl. Cendana No. 5',
+    attachments: [
+        {
+            id: '2',
+            creditorId: '1',
+            nama: 'Fotocopy KTP / Identitas',
+            ready: true,
+            deskripsi:
+                'Sedang Dalam Proses Pengambilan di Sukabumi, Sedang Dalam Proses Pengambilan di Sukabumi, Sedang Dalam Proses Pengambilan di Sukabumi, Sedang Dalam Proses Pengambilan di Sukabumi, Sedang Dalam Proses Pengambilan di Sukabumi, Sedang Dalam Proses Pengambilan di Sukabumi, ',
+        },
+        {
+            id: '3',
+            creditorId: '1',
+            nama: 'Surat Kuasa (jika dikuasakan)',
+            ready: true,
+            deskripsi: null,
+        },
+        {
+            id: '4',
+            creditorId: '1',
+            nama: 'Fotocopy KTP Penerima Kuasa',
+            ready: false,
+            deskripsi: 'Katanya hilang lah pokoknya',
+        },
+        {
+            id: '5',
+            creditorId: '1',
+            nama: 'Surat Pernah Makan Nasi Goreng',
+            ready: false,
+            deskripsi: 'Tidak ditemukan',
+        },
+        {
+            id: '5',
+            creditorId: '1',
+            nama: 'Surat Pernah Makan Nasi Padang',
+            ready: true,
+            deskripsi: null,
+        },
+    ],
+} as const

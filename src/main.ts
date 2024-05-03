@@ -1,6 +1,11 @@
-import express from 'express'
 import cors from 'cors'
+import 'dotenv/config'
+import express from 'express'
 import generatePDF from './lib/generatePDF'
+import logger from './lib/logger'
+import { errorHandler } from './middlewares/error-handler'
+import { expressLogger, errorLogger } from './middlewares/express-logger'
+import { ReqBodySchema } from './validation'
 
 const app = express()
 
@@ -13,6 +18,7 @@ const app = express()
 //     ],
 // }
 
+app.use(expressLogger)
 app.use(cors())
 app.use(express.json())
 
@@ -28,21 +34,40 @@ app.get('/generate-pdf', (req, res) => {
     res.status(200).json({ message: 'Hello from /generate-pdf route!' })
 })
 
-app.post('/generate-pdf', async (req, res) => {
-    const { data } = req.body
-
-    res.setHeader('Content-Disposition', 'attachment; filename="file.pdf"')
-    res.setHeader('Content-Type', 'application/pdf')
-
-    const pdfFile:Buffer = await generatePDF(data)
-
-    // console.log(pdfFile)
-    // console.log("pdffileType:", typeof pdfFile)
-    // console.log("is instance of Buffer?:", pdfFile instanceof Buffer)
-    res.send(Buffer.from(pdfFile))
+app.get('/400', (req, res) => {
+    res.status(400).json({
+        message: 'BAD REQ'
+    })
+})
+app.get('/500', (req, res) => {
+    res.status(500).json({
+        message: 'OH NOOSE'
+    })
+})
+app.get('/error-route', (req, res) => {
+    throw new Error('loh error yeeeeeee')
 })
 
+app.post('/generate-creditor-pdf', async (req, res, next) => {
+    try {
+        const { data } = ReqBodySchema.parse(req.body)
+
+        // res.setHeader('Content-Disposition', 'attachment; filename="file.pdf"')
+        // res.setHeader('Content-Type', 'application/pdf')
+
+        const pdfFile: Buffer = await generatePDF(data)
+
+        res.send(pdfFile)
+    } catch (err) {
+        next(err)
+    }
+})
+
+app.use(errorLogger)
+app.use(errorHandler)
+
 const PORT = process.env.PORT || 5000
+
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`)
+    logger.info(`Server is running on port ${PORT}`)
 })

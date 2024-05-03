@@ -1,68 +1,23 @@
-import puppeteer from 'puppeteer'
 import ejs from 'ejs'
 import path from 'path'
+import process from 'process'
+import puppeteer, { Browser } from 'puppeteer'
+import { CreditorValues } from '../validation'
 
-// const data = {
-//     id: '1',
-//     nama: 'Bambang Jarwo',
-//     jenis: 'PRIBADI',
-//     NIKAtauNomorAktaPendirian: '12345678',
-//     alamat: 'Jl. Menteng Raya No. 1',
-//     nomorTelepon: '',
-//     korespondensi: 'Jl. Gajah Mada No. 10',
-//     totalTagihan: '300000000',
-//     sifatTagihan: 'PREFEREN',
-//     namaKuasaHukum: '',
-//     emailKuasaHukum: '',
-//     nomorTeleponKuasaHukum: '081234567891',
-//     alamatKuasaHukum: 'Jl. Cendana No. 5',
-//     attachments: [
-//         {
-//             id: '2',
-//             creditorId: '1',
-//             nama: 'Fotocopy KTP / Identitas',
-//             ready: true,
-//             deskripsi:
-//                 'Sedang Dalam Proses Pengambilan di Sukabumi, Sedang Dalam Proses Pengambilan di Sukabumi, Sedang Dalam Proses Pengambilan di Sukabumi, Sedang Dalam Proses Pengambilan di Sukabumi, Sedang Dalam Proses Pengambilan di Sukabumi, Sedang Dalam Proses Pengambilan di Sukabumi, ',
-//         },
-//         {
-//             id: '3',
-//             creditorId: '1',
-//             nama: 'Surat Kuasa (jika dikuasakan)',
-//             ready: true,
-//             deskripsi: '',
-//         },
-//         {
-//             id: '4',
-//             creditorId: '1',
-//             nama: 'Fotocopy KTP Penerima Kuasa',
-//             ready: false,
-//             deskripsi: 'Katanya hilang lah pokoknya',
-//         },
-//         {
-//             id: '5',
-//             creditorId: '1',
-//             nama: 'Surat Pernah Makan Nasi Goreng',
-//             ready: false,
-//             deskripsi: 'Tidak ditemukan',
-//         },
-//         {
-//             id: '5',
-//             creditorId: '1',
-//             nama: 'Surat Pernah Makan Nasi Padang',
-//             ready: true,
-//             deskripsi: '',
-//         },
-//     ],
-// }
+const ejsFilePath = path.join(process.cwd(), 'src', 'views', 'template.ejs')
 
-const ejsFilePath = path.join(__dirname, '..', 'views', 'template.ejs')
+function formatCurrency(amount: number) {
+    const CURRENCY_FORMATTER = new Intl.NumberFormat('id-ID', {
+        currency: 'IDR',
+        style: 'currency',
+        minimumFractionDigits: 0,
+    })
+    return CURRENCY_FORMATTER.format(amount)
+}
 
-async function generatePDF(data: any) {
+async function generatePDF(data: CreditorValues) {
     const {
         totalTagihan,
-        id,
-        slug,
         namaKuasaHukum,
         emailKuasaHukum,
         nomorTeleponKuasaHukum,
@@ -72,15 +27,6 @@ async function generatePDF(data: any) {
         sifatTagihan,
         ...rest
     } = data
-
-    function formatCurrency(amount: number) {
-        const CURRENCY_FORMATTER = new Intl.NumberFormat('id-ID', {
-            currency: 'IDR',
-            style: 'currency',
-            minimumFractionDigits: 0,
-        })
-        return CURRENCY_FORMATTER.format(amount)
-    }
 
     const html = await ejs.renderFile(ejsFilePath, {
         data: {
@@ -93,15 +39,20 @@ async function generatePDF(data: any) {
             nama,
             jenis,
             sifatTagihan,
-            totalTagihan: formatCurrency(Number(totalTagihan)),
+            totalTagihan: formatCurrency(totalTagihan),
             ...rest,
         },
     })
 
-    const browser = await puppeteer.launch({
-        executablePath: '/usr/bin/google-chrome',
-        args: ['--no-sandbox'], // Pass the --no-sandbox flag here
-    })
+    let browser: Browser
+    if (process.env.NODE_ENV === 'development') {
+        browser = await puppeteer.launch()
+    } else {
+        browser = await puppeteer.launch({
+            executablePath: '/usr/bin/google-chrome',
+            args: ['--no-sandbox'],
+        })
+    }
     const page = await browser.newPage()
 
     // Set content of the page to the generated HTML
