@@ -63,11 +63,11 @@ async function generatePDF(data: CreditorValues) {
     <style>#header, #footer { padding: 0 !important; }</style>
     <div 
         class="header" 
-        style="padding: 15px !important; margin: 0; -webkit-print-color-adjust: exact; width: 100%; border-bottom: 1px  solid black; display:flex; flex-direction: column; justify-content: center; align-items:center; gap: 8px; text-align: left; font-size: 12px;""
+        style="padding: 15px !important; margin: 0; -webkit-print-color-adjust: exact; width: 100%; border-bottom: 0,5px  solid black; display:flex; flex-direction: column; justify-content: center; align-items:center; gap: 8px; text-align: left; font-size: 12px; ""
         >
         <h1 style="margin: 0;">CONFIDENTIAL</h1>
         <p style="font-size: 14px; margin: 0;">Detail Kreditor PT Kodomo Sukses Jaya Tbk.</p>
-        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); opacity: 0.5; font-size: 100px; font-weight: 500; color: #e0e0e0;">CONFIDENTIAL</div>
+        <div style="position: absolute; z-index: -10; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); opacity: 0.5; font-size: 100px; font-weight: 500; color: #e0e0e0;user-select: none;">CONFIDENTIAL</div>
     </div>
     `
     const footerTemplate = `

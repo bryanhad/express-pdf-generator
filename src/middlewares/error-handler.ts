@@ -6,9 +6,9 @@ export function errorHandler(
     _req: Request,
     res: Response,
     _next: NextFunction
-): void {
+): any {
     if (err instanceof z.ZodError) {
-        res.status(400).json({
+        return res.status(400).json({
             message: "Bad Request",
             errors: err.errors
         })

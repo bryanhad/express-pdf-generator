@@ -5,22 +5,22 @@ const optionalEmailSchema = z
     .string()
     .max(100)
     .email()
-    .optional()
-    .or(z.literal(''))
+
+const nullableString = z.union([z.null(), z.string().max(255)])
 
 const attachmentsSchema = z.array(
     z.object({
-        nama: z.string().min(1, 'Nama lampiran tidak boleh kosong').max(100),
+        nama: z.string().min(1, 'Attachment name cannot be empty').max(100),
         ready: z.coerce.boolean(),
-        deskripsi: z.string().max(255).optional(),
+        deskripsi: nullableString
     })
 )
 
 const kuasaHukumSchema = z.object({
-    namaKuasaHukum: z.string().min(4).max(255).optional(),
-    emailKuasaHukum: optionalEmailSchema,
-    nomorTeleponKuasaHukum: z.string().min(5).max(255).optional(),
-    alamatKuasaHukum: z.string().min(5).max(255).optional(),
+    namaKuasaHukum: nullableString,
+    emailKuasaHukum: z.union([z.null(), optionalEmailSchema]),
+    nomorTeleponKuasaHukum: nullableString,
+    alamatKuasaHukum: nullableString,
 })
 
 export const CreditorSchema = z
@@ -33,24 +33,24 @@ export const CreditorSchema = z
                 (input) =>
                     (Object.values(CreditorType) as string[]).includes(input),
                 {
-                    message: 'Pilih jenis dari kreditor',
+                    message: 'Invalid kreditor type',
                 }
             ),
-        NIKAtauNomorAktaPendirian: z.string().optional(),
-        alamat: z.string().min(5).max(255).optional().or(z.literal('')),
-        email: optionalEmailSchema,
-        nomorTelepon: z.string().min(5).max(255).optional().or(z.literal('')),
-        korespondensi: z.string().optional(),
+        NIKAtauNomorAktaPendirian: nullableString,
+        alamat: nullableString,
+        email: z.union([z.null(), optionalEmailSchema]),
+        nomorTelepon: nullableString,
+        korespondensi: nullableString,
         totalTagihan: z.coerce
             .number()
-            .min(100, 'Minimum total tagihan adalah Rp 100'),
+            .min(100, 'totalTagihan must be at least Rp 100'),
         sifatTagihan: z
             .string()
             .min(1)
             .refine(
                 (input) =>
                     (Object.values(ClaimType) as string[]).includes(input),
-                { message: 'Sifat tagihan salah' }
+                { message: 'Invalid claim type' }
             ),
         attachments: attachmentsSchema,
     })

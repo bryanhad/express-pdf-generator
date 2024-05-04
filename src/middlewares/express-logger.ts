@@ -1,6 +1,8 @@
-import expressWinston from 'express-winston'
-import { format, transports } from 'winston'
-import logger from '../lib/logger'
+import winston from "winston"
+import expressWinston from "express-winston"
+import { format, transports } from "winston"
+import logger from "../lib/logger"
+import "winston-daily-rotate-file"
 
 const expressLogger = expressWinston.logger({
     winstonInstance: logger,
@@ -8,10 +10,7 @@ const expressLogger = expressWinston.logger({
 })
 
 const errorLoggerFormat = format.printf(({ level, meta, timestamp }) => {
-    return `${timestamp} [${level}] | EXPRESS-LOGGER | ${meta.message
-        .split('\n')
-        .slice(0, 3)
-        .join('\n')}`
+    return `${timestamp} [${level}] | EXPRESS-LOGGER | ${meta.message}`
 })
 const errorLogger = expressWinston.errorLogger({
     transports: [
@@ -19,17 +18,19 @@ const errorLogger = expressWinston.errorLogger({
             format: format.combine(
                 format.colorize(),
                 format.timestamp({
-                    format: 'YYYY-MM-DD | hh:mm:ss.SSS A',
+                    format: "YYYY-MM-DD | hh:mm:ss.SSS A",
                 }),
                 format.align(),
                 errorLoggerFormat
             ),
         }),
-        new transports.File({
-            filename: 'logs/internal-error.log',
+        new winston.transports.DailyRotateFile({
+            filename: `logs/internal-error/%DATE%.log`,
+            datePattern: "YYYY-MM-DD",
+            maxFiles: "14d",
             format: format.combine(
                 format.timestamp({
-                    format: 'YYYY-MM-DD | hh:mm:ss.SSS A',
+                    format: "YYYY-MM-DD | hh:mm:ss.SSS A",
                 }),
                 errorLoggerFormat
             ),
