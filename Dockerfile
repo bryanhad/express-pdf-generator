@@ -29,5 +29,8 @@ COPY . .
 # Expose port
 EXPOSE 5000
 
+ENV NODE_ENV=production
+ENV PORT=5000
+
 # Command to run nodemon with TypeScript
 CMD ["npx", "nodemon", "./src/main.ts"]
