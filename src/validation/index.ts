@@ -1,10 +1,7 @@
 import { ClaimType, CreditorType } from '../types'
 import { z } from 'zod'
 
-const optionalEmailSchema = z
-    .string()
-    .max(100)
-    .email()
+const optionalEmailSchema = z.string().max(100).email()
 
 const nullableString = z.union([z.null(), z.string().max(255)])
 
@@ -12,7 +9,7 @@ const attachmentsSchema = z.array(
     z.object({
         nama: z.string().min(1, 'Attachment name cannot be empty').max(100),
         ready: z.coerce.boolean(),
-        deskripsi: nullableString
+        deskripsi: nullableString,
     })
 )
 
@@ -20,7 +17,7 @@ const kuasaHukumSchema = z.object({
     namaKuasaHukum: nullableString,
     emailKuasaHukum: z.union([z.null(), optionalEmailSchema]),
     nomorTeleponKuasaHukum: nullableString,
-    alamatKuasaHukum: nullableString,
+    alamatKorespondensi: nullableString,
 })
 
 export const CreditorSchema = z
@@ -40,10 +37,11 @@ export const CreditorSchema = z
         alamat: nullableString,
         email: z.union([z.null(), optionalEmailSchema]),
         nomorTelepon: nullableString,
-        korespondensi: nullableString,
-        totalTagihan: z.coerce
+        tagihanPokok: z.coerce
             .number()
-            .min(100, 'totalTagihan must be at least Rp 100'),
+            .min(100, 'Minimum total tagihan adalah Rp 100'),
+        bungaTagihan: z.coerce.number().optional(),
+        dendaTagihan: z.coerce.number().optional(),
         sifatTagihan: z
             .string()
             .min(1)
@@ -59,5 +57,5 @@ export const CreditorSchema = z
 export type CreditorValues = z.infer<typeof CreditorSchema>
 
 export const ReqBodySchema = z.object({
-    data: CreditorSchema
+    data: CreditorSchema,
 })

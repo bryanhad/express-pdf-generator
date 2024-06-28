@@ -47,7 +47,7 @@
         <!-- Wrapper div for content -->
         <div class="container">
             <div  style="text-align: center;">
-                <h1 style="text-decoration: underline; margin: 0; font-size: 16px; font-weight:bolder;">TANDA TERIMA TAGIHAN KREDITOR</h1>
+                <h1 style="text-decoration: underline; margin: 0; font-size: 16px; font-weight:900;">TANDA TERIMA TAGIHAN KREDITOR</h1>
                 <p style="margin: 0; font-size: 15px;">Nomor Urut : 00003</p>
             </div>
             <div class="field">
@@ -56,7 +56,7 @@
             <div class="fields-section">
                 <% Object.entries(data).forEach(([key, value]) => { %>
                     <% if (key !== 'attachments' && key !== 'kuasa') { %>
-                        <div style="display: flex; align-items: end; margin-bottom: 0;padding-bottom: 6px; font-size: 14px; font-weight: 400;">
+                        <div style="display: flex; align-items: end; margin-bottom: 0;padding-bottom: 6px; font-size: 15px; font-weight: 400;">
                             <p style="width: 220px; margin: 0; padding: 0;">
                                 <% switch (key) {
                                     case "NIKAtauNomorAktaPendirian": %>
@@ -89,7 +89,7 @@
                                   <%  break; } %>
                             </p>
                             <p style="margin: 0; padding-right: 5px;">:</p>
-                            <div style="border-bottom: solid 1px; flex: 1; line-height: 14px;">
+                            <div style="border-bottom: solid 2px; flex: 1; line-height: 12px;">
                                 <% if (!value) { %>    
                                     -
                                 <% } else {%>
@@ -101,47 +101,7 @@
                  <% }); %>
                 </div>
             </div>
-            <div class="field">
-                <% if (!data.kuasa.namaKuasaHukum) { %>
-                    <div style="display: flex; margin-bottom: 10px; gap: 10px; align-items: end;">
-                        <p style="font-size: 20px; font-weight: bold; margin: 0;">Detail Kuasa:</p>
-                        <p style="margin: 0;">Tidak Menggunakan Kuasa</p>
-                    </div>
-                    
-                <%} else {%>
-                <div class="section-name">Detail Kuasa:</div>
-                <div class="fields-section">
-                    <% Object.entries(data.kuasa).forEach(([key, value]) => { %>
-                        <div style="width: 100%; display: flex; padding-bottom: 4px; gap: 12px;">
-                            <p style="width: 125px; margin: 0px; text-transform: capitalize; line-height: 1.4;">
-                                <% switch (key) {
-                                    case "namaKuasaHukum": %>
-                                        <%= "Nama"%>
-                                    <% break; 
-                                    case "emailKuasaHukum": %>
-                                        <%= "Email"%>
-                                    <% break; 
-                                    case "nomorTeleponKuasaHukum": %>
-                                        <%= "Nomor Telepon"%>
-                                    <% break; 
-                                    case "alamatKuasaHukum": %>
-                                        <%= "Alamat"%>
-                                  <%  break; } %>
-                            </p>
-                            <p style="width: 7px; margin: 0px; text-align: center;">:</p>
-                            <p style="flex: 1 1 0%; margin: 0px; line-height: 1.4; ">
-                                <% if (!value) { %>    
-                                    -
-                                <% } else {%>
-                                    <%= value %>
-                                <% } %>
-                            </p>
-                        </div>
-                 <% }); %>
-                </div>
-                <%}%>
-                
-            </div>
+         
 
             <div class="field">
                 <div class="section-name">Lampiran:</div>

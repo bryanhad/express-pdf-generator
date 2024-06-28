@@ -17,30 +17,41 @@ function formatCurrency(amount: number) {
 
 async function generatePDF(data: CreditorValues) {
     const {
-        totalTagihan,
+        tagihanPokok,
+        NIKAtauNomorAktaPendirian,
+        dendaTagihan,
+        bungaTagihan,
         namaKuasaHukum,
         emailKuasaHukum,
         nomorTeleponKuasaHukum,
-        alamatKuasaHukum,
+        alamat,
+        alamatKorespondensi,
         nama,
         jenis,
         sifatTagihan,
-        ...rest
+        attachments,
     } = data
 
     const html = await ejs.renderFile(ejsFilePath, {
         data: {
-            kuasa: {
-                namaKuasaHukum,
-                emailKuasaHukum,
-                nomorTeleponKuasaHukum,
-                alamatKuasaHukum,
-            },
+            // kuasa: {
+            //     namaKuasaHukum,
+            //     emailKuasaHukum,
+            //     nomorTeleponKuasaHukum,
+            //     alamatKorespondensi,
+            // },
             nama,
-            jenis,
-            sifatTagihan,
-            totalTagihan: formatCurrency(totalTagihan),
-            ...rest,
+            NIKAtauNomorAktaPendirian,
+            "Alamat Kreditor": alamat,
+            "Kuasa atau Kuasa Hukum": namaKuasaHukum,
+            "Alamat Korespondensi": alamatKorespondensi,
+            "Contact Person": nomorTeleponKuasaHukum,
+            "Email Kuasa / Kuasa Hukum": emailKuasaHukum,
+            "Total Tagihan": formatCurrency(tagihanPokok + (dendaTagihan || 0) + (bungaTagihan || 0)),
+            "Tagihan Pokok": formatCurrency(tagihanPokok),
+            "Bunga": formatCurrency(bungaTagihan || 0),
+            "Denda": formatCurrency(dendaTagihan || 0),
+            attachments,
         },
     })
 
@@ -63,9 +74,9 @@ async function generatePDF(data: CreditorValues) {
     <style>#header, #footer { padding: 0 !important; }</style>
     <div class="header" 
     style="padding-top: 45px;margin-right: 50px; margin-left: 75px; margin-bottom: 2px; -webkit-print-color-adjust: exact; width: 100%; border-bottom: 4px solid black; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; font-size: 12px;">
-        <h1 style="margin: 0; font-weight: bolder; font-size: 24px;">TIM PENGURUS<br/>PT TFORCE INDONESIA JAYA (dalam PKPU)</h1>
-        <p style="font-size: 13px; margin: 0; padding-bottom:4px">Arifudin & Susanto Partnership (ASP Law Firm), The H Tower, 15th Floor, Unit 15-F<br/>Jln. H.R. Rasuna Said Kav. 20, Karet Kuningan, Jakarta.<br/>
-            <span style="color: rgb(0, 98, 255);">Telp. (021) 29533324 Fax. (021) 29533325</span>, E-mail: <span style="text-decoration: underline; color: rgb(0, 98, 255);">pkpu.tij@gmail.com</span>
+        <h1 style="margin: 0; font-weight: 900; font-size: 16px;">TIM PENGURUS PT TFORCE INDONESIA JAYA (dalam PKPU)</h1>
+        <p style="font-size: 16px; margin: 0; padding-bottom:4px">Arifudin & Susanto Partnership (ASP Law Firm), The H Tower, 15th Floor, Unit 15-F<br/>Jln. H.R. Rasuna Said Kav. 20, Karet Kuningan, Setiabudi, Jakarta Selatan 12940<br/>
+            <span style="color: rgb(0, 98, 255);">Telp. (021) 29533324</span>, E-mail: <span style="text-decoration: underline; color: rgb(0, 98, 255);">pkpu.tij@gmail.com</span>
         </p>
     </div>
     `
